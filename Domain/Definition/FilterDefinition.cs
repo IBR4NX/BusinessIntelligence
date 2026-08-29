@@ -1,0 +1,14 @@
+﻿namespace Domain.Definition;
+
+public class FilterDefinition
+{
+    public string ColumnName { get; set; } = string.Empty;
+
+    public ComparisonOperator Operator { get; set; }
+
+    public object? Value { get; set; }
+
+    public List<object> Values { get; set; } = new();
+
+    public LogicalOperator LogicalOperator { get; set; }
+}
