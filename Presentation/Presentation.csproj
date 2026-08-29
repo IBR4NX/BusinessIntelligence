@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Krypton.Navigator" Version="105.26.4.110" />
-    <PackageReference Include="Krypton.Toolkit" Version="105.26.7.201" />
+    <PackageReference Include="Krypton.Navigator" Version="85.24.7.204" />
+    <PackageReference Include="Krypton.Toolkit" Version="85.24.10.288" />
   </ItemGroup>
 
   <ItemGroup>

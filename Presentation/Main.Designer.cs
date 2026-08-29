@@ -29,35 +29,25 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            clbColumns = new ListBox();
             pnlHeader = new Panel();
             lblTitle = new Label();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             toolStripSplitButton1 = new ToolStripSplitButton();
             pnlSidebar = new Panel();
-            lstTables = new ListBox();
+            lstTables = new Krypton.Toolkit.KryptonListBox();
             txtSearchTable = new TextBox();
             lblTables = new Label();
-            pnlContent = new Panel();
             lblColumns = new Label();
             lblQueryBuilder = new Label();
-            checkedListBox1 = new CheckedListBox();
+            pnlContent = new Krypton.Toolkit.KryptonPanel();
+            clbColumn = new Krypton.Toolkit.KryptonCheckedListBox();
             pnlHeader.SuspendLayout();
             statusStrip1.SuspendLayout();
             pnlSidebar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pnlContent).BeginInit();
             pnlContent.SuspendLayout();
             SuspendLayout();
-            // 
-            // clbColumns
-            // 
-            clbColumns.FormattingEnabled = true;
-            clbColumns.ItemHeight = 23;
-            clbColumns.Location = new Point(121, 160);
-            clbColumns.Margin = new Padding(6);
-            clbColumns.Name = "clbColumns";
-            clbColumns.Size = new Size(150, 119);
-            clbColumns.TabIndex = 1;
             // 
             // pnlHeader
             // 
@@ -114,13 +104,10 @@
             // 
             // lstTables
             // 
-            lstTables.BorderStyle = BorderStyle.None;
-            lstTables.FormattingEnabled = true;
-            lstTables.ItemHeight = 23;
             lstTables.Location = new Point(20, 120);
             lstTables.Name = "lstTables";
-            lstTables.Size = new Size(220, 483);
-            lstTables.TabIndex = 5;
+            lstTables.Size = new Size(220, 500);
+            lstTables.TabIndex = 6;
             lstTables.SelectedIndexChanged += lstTables_SelectedIndexChanged;
             // 
             // txtSearchTable
@@ -140,23 +127,10 @@
             lblTables.TabIndex = 0;
             lblTables.Text = "TABLES";
             // 
-            // pnlContent
-            // 
-            pnlContent.BackColor = Color.FromArgb(224, 224, 224);
-            pnlContent.Controls.Add(checkedListBox1);
-            pnlContent.Controls.Add(lblColumns);
-            pnlContent.Controls.Add(lblQueryBuilder);
-            pnlContent.Controls.Add(clbColumns);
-            pnlContent.Dock = DockStyle.Fill;
-            pnlContent.Location = new Point(266, 70);
-            pnlContent.Name = "pnlContent";
-            pnlContent.Size = new Size(528, 348);
-            pnlContent.TabIndex = 4;
-            // 
             // lblColumns
             // 
             lblColumns.AutoSize = true;
-            lblColumns.Location = new Point(66, 120);
+            lblColumns.Location = new Point(17, 62);
             lblColumns.Name = "lblColumns";
             lblColumns.Size = new Size(91, 23);
             lblColumns.TabIndex = 6;
@@ -166,19 +140,29 @@
             // 
             lblQueryBuilder.AutoSize = true;
             lblQueryBuilder.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            lblQueryBuilder.Location = new Point(30, 25);
+            lblQueryBuilder.Location = new Point(17, 20);
             lblQueryBuilder.Name = "lblQueryBuilder";
             lblQueryBuilder.Size = new Size(131, 28);
             lblQueryBuilder.TabIndex = 6;
             lblQueryBuilder.Text = "Query Builder";
             // 
-            // checkedListBox1
+            // pnlContent
             // 
-            checkedListBox1.FormattingEnabled = true;
-            checkedListBox1.Location = new Point(281, 96);
-            checkedListBox1.Name = "checkedListBox1";
-            checkedListBox1.Size = new Size(150, 104);
-            checkedListBox1.TabIndex = 7;
+            pnlContent.Controls.Add(clbColumn);
+            pnlContent.Controls.Add(lblQueryBuilder);
+            pnlContent.Controls.Add(lblColumns);
+            pnlContent.Dock = DockStyle.Fill;
+            pnlContent.Location = new Point(266, 70);
+            pnlContent.Name = "pnlContent";
+            pnlContent.Size = new Size(528, 348);
+            pnlContent.TabIndex = 9;
+            // 
+            // clbColumn
+            // 
+            clbColumn.Location = new Point(95, 120);
+            clbColumn.Name = "clbColumn";
+            clbColumn.Size = new Size(150, 120);
+            clbColumn.TabIndex = 7;
             // 
             // Main
             // 
@@ -202,6 +186,7 @@
             statusStrip1.PerformLayout();
             pnlSidebar.ResumeLayout(false);
             pnlSidebar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pnlContent).EndInit();
             pnlContent.ResumeLayout(false);
             pnlContent.PerformLayout();
             ResumeLayout(false);
@@ -215,13 +200,13 @@
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private Panel pnlSidebar;
-        private ListBox lstTables;
         private TextBox txtSearchTable;
         private Label lblTables;
-        private Panel pnlContent;
         private Label lblQueryBuilder;
         private ToolStripSplitButton toolStripSplitButton1;
         private Label lblColumns;
-        private CheckedListBox checkedListBox1;
+        private Krypton.Toolkit.KryptonListBox lstTables;
+        private Krypton.Toolkit.KryptonPanel pnlContent;
+        private Krypton.Toolkit.KryptonCheckedListBox clbColumn;
     }
 }

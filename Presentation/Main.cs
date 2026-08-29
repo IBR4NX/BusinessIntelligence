@@ -30,17 +30,17 @@ namespace Presentation
         }
         private void LoadColumns(string tableName)
         {
-            clbColumns.Items.Clear();
+            clbColumn.Items.Clear();
 
             var columns =
                 _metadataService.GetColumns(tableName);
 
             foreach (var column in columns)
             {
-                clbColumns.Items.Add(column);
+                clbColumn.Items.Add(column);
             }
 
-            clbColumns.DisplayMember = "Name";
+            //clbColumn.DisplayRect;
         }
 
 
