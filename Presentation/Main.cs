@@ -44,7 +44,7 @@ namespace Presentation
         }
 
 
-        private void lstTables_SelectedIndexChanged(object sender, EventArgs e)
+        private void LstTables_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstTables.SelectedItem is not string tableName)
                 return;

@@ -31,9 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             pnlHeader = new Panel();
             lblTitle = new Label();
-            statusStrip1 = new StatusStrip();
-            toolStripStatusLabel1 = new ToolStripStatusLabel();
-            toolStripSplitButton1 = new ToolStripSplitButton();
             pnlSidebar = new Panel();
             lstTables = new Krypton.Toolkit.KryptonListBox();
             txtSearchTable = new TextBox();
@@ -42,11 +39,14 @@
             lblQueryBuilder = new Label();
             pnlContent = new Krypton.Toolkit.KryptonPanel();
             clbColumn = new Krypton.Toolkit.KryptonCheckedListBox();
+            kryptonStatusStrip1 = new Krypton.Toolkit.KryptonStatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            toolStripDropDownButton1 = new ToolStripDropDownButton();
             pnlHeader.SuspendLayout();
-            statusStrip1.SuspendLayout();
             pnlSidebar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pnlContent).BeginInit();
             pnlContent.SuspendLayout();
+            kryptonStatusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // pnlHeader
@@ -67,39 +67,14 @@
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Dynamic Data Management";
             // 
-            // statusStrip1
-            // 
-            statusStrip1.ImageScalingSize = new Size(20, 20);
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripSplitButton1 });
-            statusStrip1.Location = new Point(6, 418);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(788, 26);
-            statusStrip1.TabIndex = 3;
-            statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(0, 20);
-            // 
-            // toolStripSplitButton1
-            // 
-            toolStripSplitButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripSplitButton1.Image = (Image)resources.GetObject("toolStripSplitButton1.Image");
-            toolStripSplitButton1.ImageTransparentColor = Color.Magenta;
-            toolStripSplitButton1.Name = "toolStripSplitButton1";
-            toolStripSplitButton1.Size = new Size(39, 24);
-            toolStripSplitButton1.Text = "toolStripSplitButton1";
-            // 
             // pnlSidebar
             // 
             pnlSidebar.Controls.Add(lstTables);
             pnlSidebar.Controls.Add(txtSearchTable);
             pnlSidebar.Controls.Add(lblTables);
-            pnlSidebar.Dock = DockStyle.Left;
             pnlSidebar.Location = new Point(6, 70);
             pnlSidebar.Name = "pnlSidebar";
-            pnlSidebar.Size = new Size(260, 348);
+            pnlSidebar.Size = new Size(260, 374);
             pnlSidebar.TabIndex = 3;
             // 
             // lstTables
@@ -108,7 +83,7 @@
             lstTables.Name = "lstTables";
             lstTables.Size = new Size(220, 500);
             lstTables.TabIndex = 6;
-            lstTables.SelectedIndexChanged += lstTables_SelectedIndexChanged;
+            lstTables.SelectedIndexChanged += LstTables_SelectedIndexChanged;
             // 
             // txtSearchTable
             // 
@@ -151,7 +126,6 @@
             pnlContent.Controls.Add(clbColumn);
             pnlContent.Controls.Add(lblQueryBuilder);
             pnlContent.Controls.Add(lblColumns);
-            pnlContent.Dock = DockStyle.Fill;
             pnlContent.Location = new Point(266, 70);
             pnlContent.Name = "pnlContent";
             pnlContent.Size = new Size(528, 348);
@@ -159,10 +133,43 @@
             // 
             // clbColumn
             // 
-            clbColumn.Location = new Point(95, 120);
+            clbColumn.ImeMode = ImeMode.Hangul;
+            clbColumn.Items.AddRange(new object[] { "ibefsd dsf", "sdfsdf kelwk fwlkef", "welkfnewlkfwlekf wlekf " });
+            clbColumn.ItemStyle = Krypton.Toolkit.ButtonStyle.Custom1;
+            clbColumn.Location = new Point(17, 88);
             clbColumn.Name = "clbColumn";
-            clbColumn.Size = new Size(150, 120);
+            clbColumn.Size = new Size(273, 228);
             clbColumn.TabIndex = 7;
+            // 
+            // kryptonStatusStrip1
+            // 
+            kryptonStatusStrip1.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            kryptonStatusStrip1.ImageScalingSize = new Size(20, 20);
+            kryptonStatusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripDropDownButton1 });
+            kryptonStatusStrip1.Location = new Point(6, 415);
+            kryptonStatusStrip1.Name = "kryptonStatusStrip1";
+            kryptonStatusStrip1.ProgressBars = null;
+            kryptonStatusStrip1.RenderMode = ToolStripRenderMode.ManagerRenderMode;
+            kryptonStatusStrip1.Size = new Size(788, 29);
+            kryptonStatusStrip1.TabIndex = 10;
+            kryptonStatusStrip1.Text = "kryptonStatusStrip1";
+            kryptonStatusStrip1.Visible = false;
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.RightToLeftAutoMirrorImage = true;
+            toolStripStatusLabel1.Size = new Size(121, 23);
+            toolStripStatusLabel1.Text = "\U0001f7e2 Connected";
+            // 
+            // toolStripDropDownButton1
+            // 
+            toolStripDropDownButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripDropDownButton1.Image = (Image)resources.GetObject("toolStripDropDownButton1.Image");
+            toolStripDropDownButton1.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            toolStripDropDownButton1.Size = new Size(34, 27);
+            toolStripDropDownButton1.Text = "toolStripDropDownButton1";
             // 
             // Main
             // 
@@ -170,9 +177,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 247, 250);
             ClientSize = new Size(800, 450);
+            Controls.Add(kryptonStatusStrip1);
             Controls.Add(pnlContent);
             Controls.Add(pnlSidebar);
-            Controls.Add(statusStrip1);
             Controls.Add(pnlHeader);
             Name = "Main";
             Padding = new Padding(6);
@@ -182,13 +189,13 @@
             Load += Main_Load;
             pnlHeader.ResumeLayout(false);
             pnlHeader.PerformLayout();
-            statusStrip1.ResumeLayout(false);
-            statusStrip1.PerformLayout();
             pnlSidebar.ResumeLayout(false);
             pnlSidebar.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pnlContent).EndInit();
             pnlContent.ResumeLayout(false);
             pnlContent.PerformLayout();
+            kryptonStatusStrip1.ResumeLayout(false);
+            kryptonStatusStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -197,16 +204,16 @@
         private ListBox clbColumns;
         private Panel pnlHeader;
         private Label lblTitle;
-        private StatusStrip statusStrip1;
-        private ToolStripStatusLabel toolStripStatusLabel1;
         private Panel pnlSidebar;
         private TextBox txtSearchTable;
         private Label lblTables;
         private Label lblQueryBuilder;
-        private ToolStripSplitButton toolStripSplitButton1;
         private Label lblColumns;
         private Krypton.Toolkit.KryptonListBox lstTables;
         private Krypton.Toolkit.KryptonPanel pnlContent;
         private Krypton.Toolkit.KryptonCheckedListBox clbColumn;
+        private Krypton.Toolkit.KryptonStatusStrip kryptonStatusStrip1;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripDropDownButton toolStripDropDownButton1;
     }
 }
