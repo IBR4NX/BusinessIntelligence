@@ -24,9 +24,9 @@ public class QueryService
 
     public DataTable Execute(QueryDefinition query)
     {
-        _validator.Validate(query);
         string sql = _queryBuilder.Build(query);
         Console.WriteLine(sql); // Command Testing
+        _validator.Validate(query);
 
         return _dataRepository.ExecuteQuery(sql);
     }

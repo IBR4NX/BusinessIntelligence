@@ -32,6 +32,7 @@ namespace Presentation
                 queryBuilder,
                 validator);
             Application.Run(new Main(metaDataService, queryService));
+            //Application.Run(new Login());
         }
     }
 }

@@ -10,18 +10,18 @@ public class QueryValidator
     public QueryValidator(DatabaseMetadata metadata)
     {
         _metadata = metadata;
-        foreach (var t in metadata.Tables)
-        {
-            Console.WriteLine(t);
-        }
     }
+
     public bool IsValidTable(string tableName)
     {
         return _metadata.Tables.Contains(
             tableName,
             StringComparer.OrdinalIgnoreCase);
     }
-    public bool IsValidColumn(string tableName, string columnName)
+
+    public bool IsValidColumn(
+        string tableName,
+        string columnName)
     {
         if (!_metadata.Columns.TryGetValue(
                 tableName,
@@ -41,13 +41,15 @@ public class QueryValidator
     {
         return Enum.IsDefined(op);
     }
+
     public bool IsValidValueCount(FilterDefinition filter)
     {
-        int count = filter.Values.Count > 0
-        ? filter.Values.Count
-        : filter.Value != null
-            ? 1
-            : 0;
+        int count =
+            filter.Values.Count > 0
+                ? filter.Values.Count
+                : filter.Value != null
+                    ? 1
+                    : 0;
 
         return filter.Operator switch
         {
@@ -80,37 +82,138 @@ public class QueryValidator
                && IsValidValueCount(filter);
     }
 
-    public bool IsValidOrderBy(string? orderBy, string tableName)
+    public bool IsValidOrderBy(
+        string? orderBy,
+        string tableName)
     {
-        if (string.IsNullOrWhiteSpace(orderBy)) return true;
+        if (string.IsNullOrWhiteSpace(orderBy))
+            return true;
 
         return IsValidColumn(tableName, orderBy);
     }
 
     public void Validate(QueryDefinition query)
     {
-        if (!IsValidTable(query.TableName))
-            throw new InvalidOperationException($"Table '{query.TableName}' does not exist.");
+        ValidateTable(query);
+        ValidateSelectedColumns(query);
+        ValidateJoins(query);
+        ValidateFilters(query);
+        ValidateOrderBy(query);
+    }
 
+    private void ValidateTable(QueryDefinition query)
+    {
+        if (!IsValidTable(query.TableName))
+        {
+            throw new InvalidOperationException(
+                $"Table '{query.TableName}' does not exist.");
+        }
+    }
+
+    private void ValidateSelectedColumns(
+        QueryDefinition query)
+    {
         foreach (string column in query.SelectedColumns)
         {
-            if (!IsValidColumn(query.TableName, column))
-                throw new InvalidOperationException($"Column '{column}' does not exist in table '{query.TableName}'.");
+            ValidateColumnReference(
+                column,
+                query.TableName,
+                "Selected column");
+        }
+    }
+
+    private void ValidateColumnReference(
+        string column,
+        string defaultTable,
+        string context)
+    {
+        string tableName = defaultTable;
+        string columnName = column;
+
+        if (column.Contains('.'))
+        {
+            string[] parts = column.Split('.', 2);
+
+            tableName = parts[0];
+            columnName = parts[1];
+
+            if (!IsValidTable(tableName))
+            {
+                throw new InvalidOperationException(
+                    $"{context}: Table '{tableName}' does not exist.");
+            }
         }
 
+        else if (!IsValidColumn(tableName, columnName))
+        {
+            throw new InvalidOperationException(
+                $"{context}: Column '{columnName}' " +
+                $"does not exist in table '{tableName}'.");
+        }
+    }
+
+    private void ValidateJoins(QueryDefinition query)
+    {
+        foreach (var join in query.Joins)
+        {
+            if (!IsValidTable(join.TableName))
+            {
+                throw new InvalidOperationException(
+                    $"Join table '{join.TableName}' does not exist.");
+            }
+
+            if (!IsValidColumn(
+                    query.TableName,
+                    join.LeftColumn))
+            {
+                throw new InvalidOperationException(
+                    $"Join column '{join.LeftColumn}' " +
+                    $"does not exist in table '{query.TableName}'.");
+            }
+
+            if (!IsValidColumn(
+                    join.TableName,
+                    join.RightColumn))
+            {
+                throw new InvalidOperationException(
+                    $"Join column '{join.RightColumn}' " +
+                    $"does not exist in table '{join.TableName}'.");
+            }
+        }
+    }
+
+    private void ValidateFilters(QueryDefinition query)
+    {
         foreach (FilterDefinition filter in query.Filters)
         {
-            if (!IsValidColumn(query.TableName, filter.ColumnName))
-                throw new InvalidOperationException($"Filter column '{filter.ColumnName}' does not exist in table '{query.TableName}'.");
+            ValidateColumnReference(
+                filter.ColumnName,
+                query.TableName,
+                "Filter column");
 
             if (!IsValidOperator(filter.Operator))
-                throw new InvalidOperationException($"Operator '{filter.Operator}' is not supported.");
+            {
+                throw new InvalidOperationException(
+                    $"Operator '{filter.Operator}' is not supported.");
+            }
 
             if (!IsValidValueCount(filter))
-                throw new InvalidOperationException($"Invalid number of values for operator '{filter.Operator}'.");
+            {
+                throw new InvalidOperationException(
+                    $"Invalid number of values " +
+                    $"for operator '{filter.Operator}'.");
+            }
         }
+    }
 
-        if (!IsValidOrderBy(query.OrderBy, query.TableName))
-            throw new InvalidOperationException($"OrderBy column '{query.OrderBy}' does not exist in table '{query.TableName}'.");
+    private void ValidateOrderBy(QueryDefinition query)
+    {
+        if (string.IsNullOrWhiteSpace(query.OrderBy))
+            return;
+
+        ValidateColumnReference(
+            query.OrderBy,
+            query.TableName,
+            "OrderBy column");
     }
 }

@@ -4,13 +4,40 @@ using Business.Services;
 using Business.Validation;
 using DataAccess;
 using Domain.Definition;
+using Domain.Settings;
+using Infrastructure.Configuration;
+using Infrastructure.Settings;
 using System.Data;
-
-
 
 
 try
 {
+    TestSql();
+    //var store = new ConnectionSettingsStore(
+    //AppPaths.ConnectionsFile);
+    //ConnectionSettingsCollection s = store.Load();
+    //store.Save(new ConnectionSettings { Server = "IBOVS", Database = "ddsd" });
+    //foreach (ConnectionSettings c in s.Connections)
+    //{
+    //    Console.WriteLine("1" + c.Server);
+    //}
+
+
+
+
+
+}
+catch (Exception ex)
+{
+    Console.WriteLine("Error:");
+    Console.WriteLine(ex);
+}
+
+//Console.ReadKey();
+
+void TestSql()
+{
+    try { 
     string connectionString = @"Server=IBOVSPC;Database=Northwind;Trusted_Connection=True;TrustServerCertificate=True;";
     DbConnection dbConnection = new DbConnection(connectionString);
     DatabaseRepository dataBaseRepository = new DatabaseRepository(dbConnection);
@@ -21,6 +48,7 @@ try
     DataRepository dataRepository = new DataRepository(dbConnection);
     var validator = new QueryValidator(metaDataService.Metadata);
     var queryBuilder = new QueryBuilder();
+    //validator.IsValidColumn("");
 
     var queryService = new QueryService(
         dataRepository,
@@ -48,34 +76,39 @@ try
 
     var query = new QueryDefinition
     {
-        TableName = "Products",
+        TableName = "Orders",
 
-        SelectedColumns = new List<string>
+        SelectedColumns =
     {
-        "ProductID",
-        "ProductName",
-        "UnitPrice",
-        "UnitsInStock"
+        "OrderID",
+        "OrderDate",
+        "Customers.CustomerName"
     },
 
-        Filters = new List<FilterDefinition>
+        Filters =
     {
-        new()
+        new FilterDefinition
         {
-            ColumnName = "UnitPrice",
+            ColumnName = "Total",
             Operator = ComparisonOperator.GreaterThan,
-            Value = 2,
-            LogicalOperator = LogicalOperator.And
-        },
-
-        new()
-        {
-            ColumnName = "UnitsInStock",
-            Operator = ComparisonOperator.Between,
-            Values = {2,10 },
+            Value = 100,
             LogicalOperator = LogicalOperator.And
         }
-    }
+    },
+
+        Joins =
+    {
+        new JoinDefinition
+        {
+            TableName = "Customers",
+            LeftColumn = "CustomerID",
+            RightColumn = "CustomerID",
+            JoinType = JoinType.Inner
+        }
+    },
+
+        OrderBy = "OrderDate",
+        Descending = true
     };
     var result = queryService.Execute(query);
     foreach (DataRow row in result.Rows)
@@ -87,13 +120,46 @@ try
 
         Console.WriteLine();
     }
-
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Error:");
+        Console.WriteLine(ex);
+    }
 
 }
-catch (Exception ex)
+
+
+void stringPrint()
 {
-    Console.WriteLine("Error:");
-    Console.WriteLine(ex);
+    string text = "Hello World";
+    Console.WriteLine(text.Length); // 11
+    Console.WriteLine(text.ToUpper()); // HELLO WORLD
+    Console.WriteLine(text.ToLower()); // hello world
+    Console.WriteLine(text.Contains("Hello")); // True
+    Console.WriteLine(text.StartsWith("Hello")); // True
+    Console.WriteLine(text.EndsWith("World")); // True
+    Console.WriteLine(text.IndexOf("World")); // 6
+    Console.WriteLine(text.LastIndexOf("l")); // 9
+    Console.WriteLine(text.Replace("Hello", "Hi")); // Hi World
+    Console.WriteLine(text.Substring(0, 5)); // Hello
+    Console.WriteLine(text.Substring(6, 5)); // World
+    Console.WriteLine(text.Remove(5)); // Hello
+    Console.WriteLine(text.Remove(0, 6)); // World
+    string text2 = "   Hello World   ";
+    Console.WriteLine(text2.Trim()); // Hello World
+    Console.WriteLine(text2.TrimStart()); // Hello World   
+    Console.WriteLine(text2.TrimEnd()); //    Hello World
+    string[] result = "Ali,Ahmed,Ibrahim".Split(',');
+    Console.WriteLine(result[0]); // Ali
+    Console.WriteLine(result[1]); // Ahmed
+    Console.WriteLine(result[2]); // Ibrahim
+    string[] names = { "Ali", "Ahmed", "Ibrahim" };
+    Console.WriteLine(string.Join("-", names)); // Ali-Ahmed-Ibrahim
+    Console.WriteLine(string.Concat("Hello", " ", "World")); // Hello World
+    Console.WriteLine(string.Equals("Hello", "Hello")); // True
+    Console.WriteLine(string.Equals("Hello", "hello")); // False
+    Console.WriteLine(string.Compare("Ali", "Ahmed")); // رقم موجب
+    Console.WriteLine(string.IsNullOrEmpty("")); // True
+    Console.WriteLine(new string('*', 5)); // *****
 }
-
-//Console.ReadKey();

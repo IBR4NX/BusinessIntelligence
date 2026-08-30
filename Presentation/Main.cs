@@ -17,6 +17,8 @@ namespace Presentation
 
         private void Main_Load(object sender, EventArgs e)
         {
+            Form fl = new Login();
+            fl.ShowDialog();
             LoadTables();
         }
         private void LoadTables()

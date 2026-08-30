@@ -10,11 +10,12 @@
 
   <ItemGroup>
     <PackageReference Include="Krypton.Navigator" Version="85.24.7.204" />
-    <PackageReference Include="Krypton.Toolkit" Version="85.24.10.288" />
+    <PackageReference Include="Krypton.Toolkit" Version="85.24.8.239" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
