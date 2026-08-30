@@ -89,7 +89,7 @@ void TestSql()
     {
         new FilterDefinition
         {
-            ColumnName = "Total",
+            ColumnName = "OrderID",
             Operator = ComparisonOperator.GreaterThan,
             Value = 100,
             LogicalOperator = LogicalOperator.And

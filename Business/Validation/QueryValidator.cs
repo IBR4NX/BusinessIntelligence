@@ -117,26 +117,32 @@ public class QueryValidator
         {
             ValidateColumnReference(
                 column,
-                query.TableName,
+                query,
                 "Selected column");
         }
     }
 
     private void ValidateColumnReference(
         string column,
-        string defaultTable,
+        QueryDefinition query,
         string context)
     {
-        string tableName = defaultTable;
+        string tableName = query.TableName;
         string columnName = column;
 
         if (column.Contains('.'))
         {
+                
+
             string[] parts = column.Split('.', 2);
 
             tableName = parts[0];
             columnName = parts[1];
-
+            if(query.Joins.Count !> 0)
+            {
+                throw new InvalidOperationException(
+                    $"{context}: Column '{columnName}' in {tableName} domt joined in query.");
+            }
             if (!IsValidTable(tableName))
             {
                 throw new InvalidOperationException(
@@ -188,7 +194,7 @@ public class QueryValidator
         {
             ValidateColumnReference(
                 filter.ColumnName,
-                query.TableName,
+                query,
                 "Filter column");
 
             if (!IsValidOperator(filter.Operator))
@@ -213,7 +219,7 @@ public class QueryValidator
 
         ValidateColumnReference(
             query.OrderBy,
-            query.TableName,
+            query,
             "OrderBy column");
     }
 }
