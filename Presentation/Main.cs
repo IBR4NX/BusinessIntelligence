@@ -75,10 +75,10 @@ namespace Presentation
             CbColumns.DataSource = null;
             CbColumns.DataSource = clbColumns.CheckedItems;
             CbColumns.Text = "Choose Filter";
-            //foreach (var item in clbColumns.CheckedItems)
-            //{
-            //    CbColumns.Items.Add(item);
-            //}
+            foreach (var item in clbColumns.CheckedItems)
+            {
+                CbColumns.Items.Add(item);
+            }
         }
 
         private void BtnStart_Click(
