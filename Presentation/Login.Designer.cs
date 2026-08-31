@@ -1,135 +1,226 @@
-﻿namespace Presentation
+﻿namespace Presentation;
+
+partial class Login
 {
-    partial class Login
+    private System.ComponentModel.IContainer components = null;
+
+    protected override void Dispose(bool disposing)
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        if (disposing && (components != null))
+            components.Dispose();
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            components = new System.ComponentModel.Container();
-            CmBxServer = new Krypton.Toolkit.KryptonComboBox();
-            CmbxDatabase = new Krypton.Toolkit.KryptonComboBox();
-            kryptonButton1 = new Krypton.Toolkit.KryptonButton();
-            kryptonPictureBox1 = new Krypton.Toolkit.KryptonPictureBox();
-            kryptonSeparator1 = new Krypton.Toolkit.KryptonSeparator();
-            kryptonScrollBar1 = new Krypton.Toolkit.KryptonScrollBar();
-            ((System.ComponentModel.ISupportInitialize)CmBxServer).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)CmbxDatabase).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)kryptonPictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)kryptonSeparator1).BeginInit();
-            SuspendLayout();
-            // 
-            // CmBxServer
-            // 
-            CmBxServer.DropDownWidth = 210;
-            CmBxServer.IntegralHeight = false;
-            CmBxServer.Location = new Point(102, 304);
-            CmBxServer.Name = "CmBxServer";
-            CmBxServer.Size = new Size(210, 26);
-            CmBxServer.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
-            CmBxServer.TabIndex = 1;
-            CmBxServer.Text = "kryptonComboBox1";
-            // 
-            // CmbxDatabase
-            // 
-            CmbxDatabase.DropDownWidth = 210;
-            CmbxDatabase.IntegralHeight = false;
-            CmbxDatabase.Location = new Point(72, 150);
-            CmbxDatabase.Name = "CmbxDatabase";
-            CmbxDatabase.Size = new Size(210, 26);
-            CmbxDatabase.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
-            CmbxDatabase.TabIndex = 2;
-            CmbxDatabase.Text = "kryptonComboBox2";
-            // 
-            // kryptonButton1
-            // 
-            kryptonButton1.Location = new Point(72, 371);
-            kryptonButton1.Name = "kryptonButton1";
-            kryptonButton1.Size = new Size(112, 31);
-            kryptonButton1.TabIndex = 3;
-            kryptonButton1.Values.Text = "kryptonButton1";
-            // 
-            // kryptonPictureBox1
-            // 
-            kryptonPictureBox1.ErrorImage = Properties.Resources.logo_2;
-            kryptonPictureBox1.Image = Properties.Resources.l;
-            kryptonPictureBox1.InitialImage = Properties.Resources.logo_2;
-            kryptonPictureBox1.Location = new Point(12, 12);
-            kryptonPictureBox1.Name = "kryptonPictureBox1";
-            kryptonPictureBox1.Size = new Size(358, 103);
-            kryptonPictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            kryptonPictureBox1.TabIndex = 4;
-            kryptonPictureBox1.TabStop = false;
-            // 
-            // kryptonSeparator1
-            // 
-            kryptonSeparator1.Location = new Point(72, 106);
-            kryptonSeparator1.Name = "kryptonSeparator1";
-            kryptonSeparator1.Size = new Size(10, 315);
-            kryptonSeparator1.TabIndex = 5;
-            // 
-            // kryptonScrollBar1
-            // 
-            kryptonScrollBar1.BorderColor = Color.FromArgb(93, 140, 201);
-            kryptonScrollBar1.DisabledBorderColor = Color.Gray;
-            kryptonScrollBar1.Location = new Point(351, 138);
-            kryptonScrollBar1.Name = "kryptonScrollBar1";
-            kryptonScrollBar1.Opacity = 1D;
-            kryptonScrollBar1.Size = new Size(19, 250);
-            kryptonScrollBar1.TabIndex = 6;
-            kryptonScrollBar1.Text = "kryptonScrollBar1";
-            // 
-            // Login
-            // 
-            AutoScaleDimensions = new SizeF(9F, 23F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(382, 553);
-            Controls.Add(kryptonScrollBar1);
-            Controls.Add(kryptonSeparator1);
-            Controls.Add(kryptonPictureBox1);
-            Controls.Add(kryptonButton1);
-            Controls.Add(CmbxDatabase);
-            Controls.Add(CmBxServer);
-            Name = "Login";
-            Text = "Login";
-            Load += Login_Load;
-            ((System.ComponentModel.ISupportInitialize)CmBxServer).EndInit();
-            ((System.ComponentModel.ISupportInitialize)CmbxDatabase).EndInit();
-            ((System.ComponentModel.ISupportInitialize)kryptonPictureBox1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)kryptonSeparator1).EndInit();
-            ResumeLayout(false);
-        }
-
-        #endregion
-
-        private Krypton.Toolkit.KryptonThemeComboBox kryptonThemeComboBox1;
-        private Krypton.Toolkit.KryptonComboBox CmBxServer;
-        private Krypton.Toolkit.KryptonComboBox CmbxDatabase;
-        private Krypton.Toolkit.KryptonButton kryptonButton1;
-        private Krypton.Toolkit.KryptonPictureBox kryptonPictureBox1;
-        private Krypton.Toolkit.KryptonSeparator kryptonSeparator1;
-        private Krypton.Toolkit.KryptonScrollBar kryptonScrollBar1;
+        base.Dispose(disposing);
     }
+
+    #region Windows Form Designer generated code
+
+    private void InitializeComponent()
+    {
+        kryptonPictureBox1 = new Krypton.Toolkit.KryptonPictureBox();
+        LblTitle = new Krypton.Toolkit.KryptonLabel();
+        LblHint = new Krypton.Toolkit.KryptonLabel();
+        LblServer = new Krypton.Toolkit.KryptonLabel();
+        LblDatabase = new Krypton.Toolkit.KryptonLabel();
+        LblAuthentication = new Krypton.Toolkit.KryptonLabel();
+        LblUsername = new Krypton.Toolkit.KryptonLabel();
+        LblPassword = new Krypton.Toolkit.KryptonLabel();
+        CmBxServer = new Krypton.Toolkit.KryptonComboBox();
+        CmBxDatabase = new Krypton.Toolkit.KryptonComboBox();
+        CmbxAuthentication = new Krypton.Toolkit.KryptonComboBox();
+        TxtUsername = new Krypton.Toolkit.KryptonTextBox();
+        TxtPassword = new Krypton.Toolkit.KryptonTextBox();
+        BtnLogin = new Krypton.Toolkit.KryptonButton();
+        BtnCancel = new Krypton.Toolkit.KryptonButton();
+        ((System.ComponentModel.ISupportInitialize)kryptonPictureBox1).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)CmBxServer).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)CmBxDatabase).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)CmbxAuthentication).BeginInit();
+        SuspendLayout();
+        // 
+        // kryptonPictureBox1
+        // 
+        kryptonPictureBox1.Image = Properties.Resources.l;
+        kryptonPictureBox1.Location = new Point(38, 16);
+        kryptonPictureBox1.Name = "kryptonPictureBox1";
+        kryptonPictureBox1.Size = new Size(306, 82);
+        kryptonPictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+        kryptonPictureBox1.TabIndex = 0;
+        kryptonPictureBox1.TabStop = false;
+        // 
+        // LblTitle
+        // 
+        LblTitle.Location = new Point(35, 104);
+        LblTitle.Name = "LblTitle";
+        LblTitle.Size = new Size(208, 41);
+        LblTitle.StateCommon.ShortText.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Regular, GraphicsUnit.Point);
+        LblTitle.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
+        LblTitle.TabIndex = 14;
+        LblTitle.Values.Text = "Database Login";
+        // 
+        // LblHint
+        // 
+        LblHint.Location = new Point(35, 136);
+        LblHint.Name = "LblHint";
+        LblHint.Size = new Size(265, 24);
+        LblHint.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
+        LblHint.TabIndex = 13;
+        LblHint.Values.Text = "Connect to your SQL Server database";
+        // 
+        // LblServer
+        // 
+        LblServer.Location = new Point(35, 174);
+        LblServer.Name = "LblServer";
+        LblServer.Size = new Size(54, 24);
+        LblServer.TabIndex = 12;
+        LblServer.Values.Text = "Server";
+        // 
+        // LblDatabase
+        // 
+        LblDatabase.Location = new Point(35, 237);
+        LblDatabase.Name = "LblDatabase";
+        LblDatabase.Size = new Size(75, 24);
+        LblDatabase.TabIndex = 11;
+        LblDatabase.Values.Text = "Database";
+        // 
+        // LblAuthentication
+        // 
+        LblAuthentication.Location = new Point(35, 300);
+        LblAuthentication.Name = "LblAuthentication";
+        LblAuthentication.Size = new Size(112, 24);
+        LblAuthentication.TabIndex = 10;
+        LblAuthentication.Values.Text = "Authentication";
+        // 
+        // LblUsername
+        // 
+        LblUsername.Location = new Point(35, 363);
+        LblUsername.Name = "LblUsername";
+        LblUsername.Size = new Size(80, 24);
+        LblUsername.TabIndex = 9;
+        LblUsername.Values.Text = "Username";
+        // 
+        // LblPassword
+        // 
+        LblPassword.Location = new Point(35, 426);
+        LblPassword.Name = "LblPassword";
+        LblPassword.Size = new Size(76, 24);
+        LblPassword.TabIndex = 8;
+        LblPassword.Values.Text = "Password";
+        // 
+        // CmBxServer
+        // 
+        CmBxServer.DropDownWidth = 310;
+        CmBxServer.IntegralHeight = false;
+        CmBxServer.Location = new Point(35, 198);
+        CmBxServer.Name = "CmBxServer";
+        CmBxServer.Size = new Size(312, 26);
+        CmBxServer.TabIndex = 1;
+        // 
+        // CmBxDatabase
+        // 
+        CmBxDatabase.DropDownWidth = 310;
+        CmBxDatabase.IntegralHeight = false;
+        CmBxDatabase.Location = new Point(35, 261);
+        CmBxDatabase.Name = "CmBxDatabase";
+        CmBxDatabase.Size = new Size(312, 26);
+        CmBxDatabase.TabIndex = 2;
+        // 
+        // CmbxAuthentication
+        // 
+        CmbxAuthentication.DropDownWidth = 310;
+        CmbxAuthentication.IntegralHeight = false;
+        CmbxAuthentication.Items.AddRange(new object[] { "Windows Authentication", "SQL Server Authentication" });
+        CmbxAuthentication.Location = new Point(35, 324);
+        CmbxAuthentication.Name = "CmbxAuthentication";
+        CmbxAuthentication.Size = new Size(312, 26);
+        CmbxAuthentication.TabIndex = 3;
+        CmbxAuthentication.SelectedIndexChanged += CmbxAuthentication_SelectedIndexChanged;
+        // 
+        // TxtUsername
+        // 
+        TxtUsername.Location = new Point(35, 387);
+        TxtUsername.Name = "TxtUsername";
+        TxtUsername.Size = new Size(312, 27);
+        TxtUsername.TabIndex = 4;
+        // 
+        // TxtPassword
+        // 
+        TxtPassword.Location = new Point(35, 450);
+        TxtPassword.Name = "TxtPassword";
+        TxtPassword.PasswordChar = '●';
+        TxtPassword.Size = new Size(312, 27);
+        TxtPassword.TabIndex = 5;
+        TxtPassword.UseSystemPasswordChar = true;
+        // 
+        // BtnLogin
+        // 
+        BtnLogin.Location = new Point(35, 495);
+        BtnLogin.Name = "BtnLogin";
+        BtnLogin.Size = new Size(150, 36);
+        BtnLogin.TabIndex = 6;
+        BtnLogin.Values.Text = "Connect";
+        BtnLogin.Click += BtnLogin_Click;
+        // 
+        // BtnCancel
+        // 
+        BtnCancel.DialogResult = DialogResult.Cancel;
+        BtnCancel.Location = new Point(197, 495);
+        BtnCancel.Name = "BtnCancel";
+        BtnCancel.Size = new Size(150, 36);
+        BtnCancel.TabIndex = 7;
+        BtnCancel.Values.Text = "Cancel";
+        // 
+        // Connect
+        // 
+        AcceptButton = BtnLogin;
+        AutoScaleDimensions = new SizeF(9F, 23F);
+        AutoScaleMode = AutoScaleMode.Font;
+        CancelButton = BtnCancel;
+        ClientSize = new Size(382, 553);
+        Controls.Add(BtnCancel);
+        Controls.Add(BtnLogin);
+        Controls.Add(TxtPassword);
+        Controls.Add(LblPassword);
+        Controls.Add(TxtUsername);
+        Controls.Add(LblUsername);
+        Controls.Add(CmbxAuthentication);
+        Controls.Add(LblAuthentication);
+        Controls.Add(CmBxDatabase);
+        Controls.Add(LblDatabase);
+        Controls.Add(CmBxServer);
+        Controls.Add(LblServer);
+        Controls.Add(LblHint);
+        Controls.Add(LblTitle);
+        Controls.Add(kryptonPictureBox1);
+        FormBorderStyle = FormBorderStyle.FixedDialog;
+        MaximizeBox = false;
+        MinimizeBox = false;
+        Name = "Login";
+        StartPosition = FormStartPosition.CenterScreen;
+        Text = "Business Intelligence - Login";
+        Load += Login_Load;
+        ((System.ComponentModel.ISupportInitialize)kryptonPictureBox1).EndInit();
+        ((System.ComponentModel.ISupportInitialize)CmBxServer).EndInit();
+        ((System.ComponentModel.ISupportInitialize)CmBxDatabase).EndInit();
+        ((System.ComponentModel.ISupportInitialize)CmbxAuthentication).EndInit();
+        ResumeLayout(false);
+        PerformLayout();
+    }
+
+    #endregion
+
+    private Krypton.Toolkit.KryptonPictureBox kryptonPictureBox1;
+    private Krypton.Toolkit.KryptonLabel LblTitle;
+    private Krypton.Toolkit.KryptonLabel LblHint;
+    private Krypton.Toolkit.KryptonLabel LblServer;
+    private Krypton.Toolkit.KryptonLabel LblDatabase;
+    private Krypton.Toolkit.KryptonLabel LblAuthentication;
+    private Krypton.Toolkit.KryptonLabel LblUsername;
+    private Krypton.Toolkit.KryptonLabel LblPassword;
+    private Krypton.Toolkit.KryptonComboBox CmBxServer;
+    private Krypton.Toolkit.KryptonComboBox CmBxDatabase;
+    private Krypton.Toolkit.KryptonComboBox CmbxAuthentication;
+    private Krypton.Toolkit.KryptonTextBox TxtUsername;
+    private Krypton.Toolkit.KryptonTextBox TxtPassword;
+    private Krypton.Toolkit.KryptonButton BtnLogin;
+    private Krypton.Toolkit.KryptonButton BtnCancel;
 }

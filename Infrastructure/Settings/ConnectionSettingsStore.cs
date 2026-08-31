@@ -35,14 +35,12 @@ public class ConnectionSettingsStore
     {
         var collection = Load();
 
-
         bool exists = checkEquals(settings, collection);
 
         if (!exists)
         {
             collection.Connections.Add(settings);
         }
-
         string json = JsonSerializer.Serialize(
             collection,
             new JsonSerializerOptions

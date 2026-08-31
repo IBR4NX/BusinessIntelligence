@@ -19,7 +19,7 @@ namespace Presentation
 
         private void Main_Load(object sender, EventArgs e)
         {
-            Form fl = new Login();
+            Form fl = new LoginOld();
             //fl.ShowDialog();
             LoadTables();
         }
