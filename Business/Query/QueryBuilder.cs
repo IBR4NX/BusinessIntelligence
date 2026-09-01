@@ -9,14 +9,23 @@ public class QueryBuilder
 
     public string Build(QueryDefinition query)
     {
+        return Build(query, out _);
+    }
+
+    public string Build(
+        QueryDefinition query,
+        out IReadOnlyDictionary<string, object?> parameters)
+    {
         var sql = new StringBuilder();
+        var queryParameters = new Dictionary<string, object?>();
 
         sql.Append(BuildSelect(query));
         sql.Append(BuildFrom(query));
         sql.Append(BuildJoins(query));
-        sql.Append(BuildWhere(query));
+        sql.Append(BuildWhere(query, queryParameters));
         sql.Append(BuildOrderBy(query));
 
+        parameters = queryParameters;
         return sql.ToString();
     }
 
@@ -62,20 +71,25 @@ public class QueryBuilder
         return sql.ToString();
     }
 
-    private string BuildWhere(QueryDefinition query)
+    private string BuildWhere(
+        QueryDefinition query,
+        Dictionary<string, object?> queryParameters)
     {
         if (query.Filters.Count == 0)
             return string.Empty;
 
         var conditions = new List<string>();
 
+        int parameterIndex = 0;
         for (int i = 0; i < query.Filters.Count; i++)
         {
             var filter = query.Filters[i];
 
-            string condition = _filterBuilder
-                .Build(filter)
-                .Sql;
+            FilterResult filterResult = _filterBuilder.Build(filter, ref parameterIndex);
+            string condition = filterResult.Sql;
+
+            foreach (var parameter in filterResult.Parameters)
+                queryParameters.Add(parameter.Key, parameter.Value);
 
             if (i > 0)
             {

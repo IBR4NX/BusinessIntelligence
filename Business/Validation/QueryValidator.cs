@@ -45,7 +45,7 @@ public class QueryValidator
     public bool IsValidValueCount(FilterDefinition filter)
     {
         int count =
-            filter.Values.Count > 0
+            filter.Values?.Count > 0
                 ? filter.Values.Count
                 : filter.Value != null
                     ? 1
@@ -138,15 +138,32 @@ public class QueryValidator
 
             tableName = parts[0];
             columnName = parts[1];
-            if(query.Joins.Count !> 0)
-            {
-                throw new InvalidOperationException(
-                    $"{context}: Column '{columnName}' in {tableName} domt joined in query.");
-            }
             if (!IsValidTable(tableName))
             {
                 throw new InvalidOperationException(
                     $"{context}: Table '{tableName}' does not exist.");
+            }
+
+            bool isMainTable = string.Equals(
+                tableName,
+                query.TableName,
+                StringComparison.OrdinalIgnoreCase);
+            bool isJoinedTable = query.Joins.Any(join => string.Equals(
+                join.TableName,
+                tableName,
+                StringComparison.OrdinalIgnoreCase));
+
+            if (!isMainTable && !isJoinedTable)
+            {
+                throw new InvalidOperationException(
+                    $"{context}: Table '{tableName}' is not joined in the query.");
+            }
+
+            if (!IsValidColumn(tableName, columnName))
+            {
+                throw new InvalidOperationException(
+                    $"{context}: Column '{columnName}' " +
+                    $"does not exist in table '{tableName}'.");
             }
         }
 

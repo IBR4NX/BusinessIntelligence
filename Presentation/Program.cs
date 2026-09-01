@@ -12,22 +12,22 @@ internal static class Program
     static void Main()
     {
         ApplicationConfiguration.Initialize();
-
         using var login = new Login();
+
 
         if (login.ShowDialog() != DialogResult.OK)
             return;
 
-        var dbConnection = new DbConnection(login.ConnectionString);
 
-        var databaseRepository = new DatabaseRepository(dbConnection);
+
+        var databaseRepository = new DatabaseRepository(login.Connection);
         var metadataService = new MetadataService(databaseRepository);
 
         try
         {
             metadataService.Load();
 
-            var dataRepository = new DataRepository(dbConnection);
+            var dataRepository = new DataRepository(login.Connection);
             var validator = new QueryValidator(metadataService.Metadata);
             var queryBuilder = new QueryBuilder();
 

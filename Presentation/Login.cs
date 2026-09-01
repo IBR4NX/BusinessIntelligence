@@ -1,15 +1,18 @@
 ﻿using Business.Builder;
+using DataAccess;
 using Domain.Settings;
 using Infrastructure.Configuration;
 using Infrastructure.Settings;
-using System.Data.SqlClient;
 
+using System.Data.SqlClient;
 namespace Presentation;
 
 public partial class Login : Form
 {
     public string ConnectionString { get; private set; } = string.Empty;
     private ConnectionSettingsStore store = new ConnectionSettingsStore(AppPaths.ConnectionsFile);
+    public SqlConnection sqlConnection;
+    public DbConnection Connection;
 
     public Login()
     {
@@ -52,7 +55,6 @@ public partial class Login : Form
         UpdateAuthenticationState();
 
     }
-
     private void UpdateAuthenticationState()
     {
         bool sqlAuthentication = CmbxAuthentication.SelectedIndex == 1;
@@ -113,8 +115,10 @@ public partial class Login : Form
             BtnLogin.Enabled = false;
             BtnLogin.Text = "Connecting...";
 
-            using var connection = new SqlConnection(connectionString);
-            connection.Open();
+            Connection = new DbConnection(connectionString);
+            sqlConnection = Connection.CreateConnection();
+
+
 
             ConnectionString = connectionString;
 
@@ -166,4 +170,8 @@ public partial class Login : Form
         });
     }
 
+    private void BtnCancel_Click(object sender, EventArgs e)
+    {
+
+    }
 }

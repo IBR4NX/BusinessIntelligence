@@ -6,12 +6,13 @@ public class DbConnection
 {
     private readonly string _connectionString;
 
+    public SqlConnection connection { get; set; }
+
     public DbConnection(string connectionString)
     {
         _connectionString = connectionString;
-        connection = new SqlConnection(connectionString);
+        connection = new SqlConnection(_connectionString);
     }
-    public SqlConnection connection { get; private set; }
 
     public SqlConnection CreateConnection()
     {

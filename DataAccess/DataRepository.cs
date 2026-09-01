@@ -50,7 +50,9 @@ public class DataRepository
 
         return table;
     }
-    public DataTable ExecuteQuery(string query)
+    public DataTable ExecuteQuery(
+        string query,
+        IReadOnlyDictionary<string, object?>? parameters = null)
     {
         var table = new DataTable();
 
@@ -59,6 +61,12 @@ public class DataRepository
         using SqlCommand command = connection.CreateCommand();
 
         command.CommandText = query;
+
+        if (parameters is not null)
+        {
+            foreach (var parameter in parameters)
+                command.Parameters.AddWithValue(parameter.Key, parameter.Value ?? DBNull.Value);
+        }
 
         using SqlDataAdapter adapter = new SqlDataAdapter(command);
 

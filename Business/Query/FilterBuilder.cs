@@ -4,38 +4,38 @@ namespace Business.Query;
 
 public class FilterBuilder
 {
-    public FilterResult Build(FilterDefinition filter)
+    public FilterResult Build(FilterDefinition filter, ref int parameterIndex)
     {
         string column = $"[{filter.ColumnName}]";
 
         return filter.Operator switch
         {
             ComparisonOperator.Equal =>
-                BuildSingleValue(column, "=", filter),
+                BuildSingleValue(column, "=", filter, ref parameterIndex),
 
             ComparisonOperator.NotEqual =>
-                BuildSingleValue(column, "<>", filter),
+                BuildSingleValue(column, "<>", filter, ref parameterIndex),
 
             ComparisonOperator.GreaterThan =>
-                BuildSingleValue(column, ">", filter),
+                BuildSingleValue(column, ">", filter, ref parameterIndex),
 
             ComparisonOperator.LessThan =>
-                BuildSingleValue(column, "<", filter),
+                BuildSingleValue(column, "<", filter, ref parameterIndex),
 
             ComparisonOperator.GreaterThanOrEqual =>
-                BuildSingleValue(column, ">=", filter),
+                BuildSingleValue(column, ">=", filter, ref parameterIndex),
 
             ComparisonOperator.LessThanOrEqual =>
-                BuildSingleValue(column, "<=", filter),
+                BuildSingleValue(column, "<=", filter, ref parameterIndex),
 
             ComparisonOperator.Like =>
-                BuildSingleValue(column, "LIKE", filter),
+                BuildSingleValue(column, "LIKE", filter, ref parameterIndex),
 
             ComparisonOperator.Between =>
-                BuildBetween(column, filter),
+                BuildBetween(column, filter, ref parameterIndex),
 
             ComparisonOperator.In =>
-                BuildIn(column, filter),
+                BuildIn(column, filter, ref parameterIndex),
 
             ComparisonOperator.IsNull =>
                 new FilterResult { Sql = $"{column} IS NULL" },
@@ -51,37 +51,57 @@ public class FilterBuilder
     private FilterResult BuildSingleValue(
     string column,
     string sqlOperator,
-    FilterDefinition filter)
+    FilterDefinition filter,
+    ref int parameterIndex)
     {
+        object? value = filter.Value ?? filter.Values?.FirstOrDefault();
+        string parameterName = $"@p{parameterIndex++}";
+
         return new FilterResult
         {
-            Sql = $"{column} {sqlOperator} {filter.Value ?? filter.Values[0] ?? DBNull.Value}",
+            Sql = $"{column} {sqlOperator} {parameterName}",
+            Parameters = { [parameterName] = value ?? DBNull.Value }
         };
     }
 
     private FilterResult BuildBetween(
         string column,
-        FilterDefinition filter)
+        FilterDefinition filter,
+        ref int parameterIndex)
     {
+        var values = filter.Values ?? throw new InvalidOperationException("Between requires two values.");
+        string firstParameter = $"@p{parameterIndex++}";
+        string secondParameter = $"@p{parameterIndex++}";
+
         return new FilterResult
         {
-            Sql = $"{column} BETWEEN {filter.Values[0]} AND {filter.Values[1]}",
+            Sql = $"{column} BETWEEN {firstParameter} AND {secondParameter}",
+            Parameters =
+            {
+                [firstParameter] = values[0] ?? DBNull.Value,
+                [secondParameter] = values[1] ?? DBNull.Value
+            }
         };
     }
 
     private FilterResult BuildIn(
         string column,
-        FilterDefinition filter)
+        FilterDefinition filter,
+        ref int parameterIndex)
     {
-        var parameter = Enumerable
-            .Range(0, filter.Values.Count)
-            .Select(i => $"{filter.Values[i]}")
-            .ToList();
+        var values = filter.Values ?? throw new InvalidOperationException("In requires at least one value.");
+        var result = new FilterResult();
+        var parameters = new List<string>();
 
-        return new FilterResult
+        foreach (object value in values)
         {
-            Sql = $"{column} IN ({string.Join(", ", parameter)})"
-        };
+            string parameterName = $"@p{parameterIndex++}";
+            parameters.Add(parameterName);
+            result.Parameters[parameterName] = value ?? DBNull.Value;
+        }
+
+        result.Sql = $"{column} IN ({string.Join(", ", parameters)})";
+        return result;
     }
 
 }
@@ -91,5 +111,5 @@ public class FilterResult
 {
     public string Sql { get; set; } = string.Empty;
 
-    public List<object?> Values { get; set; } = new();
+    public Dictionary<string, object?> Parameters { get; } = new();
 }

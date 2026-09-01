@@ -11,7 +11,7 @@ public class DatabaseRepository
     public DatabaseRepository(DbConnection dbConnection)
     {
         _dbConnection = dbConnection;
-        connection = dbConnection.connection;
+        connection = dbConnection.CreateConnection();
     }
 
     public List<string> GetTables()

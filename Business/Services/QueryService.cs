@@ -24,11 +24,10 @@ public class QueryService
 
     public DataTable Execute(QueryDefinition query)
     {
-        string sql = _queryBuilder.Build(query);
-        Console.WriteLine(sql); // Command Testing
         _validator.Validate(query);
+        string sql = _queryBuilder.Build(query, out var parameters);
 
-        return _dataRepository.ExecuteQuery(sql);
+        return _dataRepository.ExecuteQuery(sql, parameters);
     }
 
 }
