@@ -1,4 +1,7 @@
-﻿namespace Presentation
+﻿using Domain;
+using System.Data;
+
+namespace Presentation
 {
     internal static class Helper
     {
@@ -10,5 +13,6 @@
                 MessageBoxButtons.OK,
                 icon);
         }
+
     }
 }

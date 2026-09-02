@@ -54,12 +54,12 @@ public class FilterBuilder
     FilterDefinition filter,
     ref int parameterIndex)
     {
-        object? value = filter.Value ?? filter.Values?.FirstOrDefault();
+        object? value = filter.Values[0];
         string parameterName = $"@p{parameterIndex++}";
 
         return new FilterResult
         {
-            Sql = $"{column} {sqlOperator} {parameterName}",
+            Sql = $"{column} {sqlOperator} {value}",
             Parameters = { [parameterName] = value ?? DBNull.Value }
         };
     }
@@ -70,17 +70,17 @@ public class FilterBuilder
         ref int parameterIndex)
     {
         var values = filter.Values ?? throw new InvalidOperationException("Between requires two values.");
-        string firstParameter = $"@p{parameterIndex++}";
-        string secondParameter = $"@p{parameterIndex++}";
+        //string firstParameter = $"@p{parameterIndex++}";
+        //string secondParameter = $"@p{parameterIndex++}";
 
         return new FilterResult
         {
-            Sql = $"{column} BETWEEN {firstParameter} AND {secondParameter}",
-            Parameters =
-            {
-                [firstParameter] = values[0] ?? DBNull.Value,
-                [secondParameter] = values[1] ?? DBNull.Value
-            }
+            Sql = $"{column} BETWEEN {values[0]} AND {values[1]}",
+            //Parameters =
+            //{
+            //    [firstParameter] = values[0] ?? DBNull.Value,
+            //    [secondParameter] = values[1] ?? DBNull.Value
+            //}
         };
     }
 
@@ -93,14 +93,14 @@ public class FilterBuilder
         var result = new FilterResult();
         var parameters = new List<string>();
 
-        foreach (object value in values)
-        {
-            string parameterName = $"@p{parameterIndex++}";
-            parameters.Add(parameterName);
-            result.Parameters[parameterName] = value ?? DBNull.Value;
-        }
+        //foreach (object value in values)
+        //{
+        //    string parameterName = $"@p{parameterIndex++}";
+        //    parameters.Add(parameterName);
+        //    result.Parameters[parameterName] = value ?? DBNull.Value;
+        //}
 
-        result.Sql = $"{column} IN ({string.Join(", ", parameters)})";
+        result.Sql = $"{column} IN ({string.Join(", ", values)})";
         return result;
     }
 

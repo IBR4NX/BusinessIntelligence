@@ -2,6 +2,7 @@
 
 public class JoinDefinition
 {
+    public string SchemaName { get; set; } = "dbo";
     public string TableName { get; set; } = string.Empty;
 
     public string LeftColumn { get; set; } = string.Empty;

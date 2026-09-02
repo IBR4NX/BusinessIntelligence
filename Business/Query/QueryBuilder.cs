@@ -1,4 +1,5 @@
 ﻿using Domain.Definition;
+using System.Diagnostics;
 using System.Text;
 
 namespace Business.Query;
@@ -43,7 +44,7 @@ public class QueryBuilder
 
     private string BuildFrom(QueryDefinition query)
     {
-        return $"FROM [{query.TableName}] ";
+        return $"FROM {query.TableName} ";
     }
 
     private string BuildJoins(QueryDefinition query)
@@ -83,10 +84,10 @@ public class QueryBuilder
         int parameterIndex = 0;
         for (int i = 0; i < query.Filters.Count; i++)
         {
-            var filter = query.Filters[i];
 
-            FilterResult filterResult = _filterBuilder.Build(filter, ref parameterIndex);
+            FilterResult filterResult = _filterBuilder.Build(query.Filters[i], ref parameterIndex);
             string condition = filterResult.Sql;
+            Debug.WriteLine(condition);
 
             foreach (var parameter in filterResult.Parameters)
                 queryParameters.Add(parameter.Key, parameter.Value);
@@ -94,10 +95,8 @@ public class QueryBuilder
             if (i > 0)
             {
                 string logicalOperator =
-                    query.Filters[i - 1].LogicalOperator
-                        == LogicalOperator.And
-                            ? "AND"
-                            : "OR";
+                    query.Filters[i].LogicalOperator
+                        == LogicalOperator.And ? "AND" : "OR";
 
                 condition = $"{logicalOperator} {condition}";
             }

@@ -25,19 +25,24 @@ namespace Presentation
             toolStripContainer1 = new ToolStripContainer();
             panelContent = new Panel();
             pnlContent = new Panel();
+            cmbJoinTable = new ComboBox();
             pnlClbColomns = new Panel();
             ClbColumns = new CheckedListBox();
             lblColumns = new Label();
             pnlFilters = new Panel();
+            label2 = new Label();
+            CmbLogical = new ComboBox();
+            label1 = new Label();
             lblFilter = new Label();
+            BtnAddFilter = new Button();
+            BtnClearFilters = new Button();
             lblOperator = new Label();
+            cmbValueType = new ComboBox();
             lblValue = new Label();
             CbColumnsFilter = new ComboBox();
             cmbFilterOperator = new ComboBox();
             txtFilterValue = new TextBox();
-            BtnAddFilter = new Button();
             lstFilters = new ListBox();
-            BtnClearFilters = new Button();
             BtnStart = new Button();
             pnlTop = new Panel();
             lblTitle = new Label();
@@ -75,7 +80,6 @@ namespace Presentation
             EditItem = new ToolStripMenuItem();
             deleteTheItemToolStripMenuItem = new ToolStripMenuItem();
             extrnaToolStripMenuItem = new ToolStripMenuItem();
-            timer1 = new System.Windows.Forms.Timer(components);
             BottomToolStripPanel = new ToolStripPanel();
             miniToolStrip = new StatusStrip();
             toolStripStatusLabelTables = new ToolStripStatusLabel();
@@ -151,10 +155,20 @@ namespace Presentation
             // 
             resources.ApplyResources(pnlContent, "pnlContent");
             pnlContent.BackColor = Color.FromArgb(18, 18, 20);
+            pnlContent.Controls.Add(cmbJoinTable);
             pnlContent.Controls.Add(pnlClbColomns);
             pnlContent.Controls.Add(lblColumns);
             pnlContent.Controls.Add(pnlFilters);
+            pnlContent.Controls.Add(BtnStart);
             pnlContent.Name = "pnlContent";
+            // 
+            // cmbJoinTable
+            // 
+            cmbJoinTable.BackColor = Color.FromArgb(36, 38, 44);
+            cmbJoinTable.DropDownStyle = ComboBoxStyle.DropDownList;
+            resources.ApplyResources(cmbJoinTable, "cmbJoinTable");
+            cmbJoinTable.ForeColor = Color.FromArgb(235, 235, 240);
+            cmbJoinTable.Name = "cmbJoinTable";
             // 
             // pnlClbColomns
             // 
@@ -179,24 +193,46 @@ namespace Presentation
             resources.ApplyResources(lblColumns, "lblColumns");
             lblColumns.ForeColor = Color.FromArgb(235, 235, 240);
             lblColumns.Name = "lblColumns";
-            lblColumns.Click += lblColumns_Click;
             // 
             // pnlFilters
             // 
             pnlFilters.BackColor = Color.FromArgb(28, 30, 35);
             pnlFilters.BorderStyle = BorderStyle.FixedSingle;
+            pnlFilters.Controls.Add(label2);
+            pnlFilters.Controls.Add(CmbLogical);
+            pnlFilters.Controls.Add(label1);
             pnlFilters.Controls.Add(lblFilter);
+            pnlFilters.Controls.Add(BtnAddFilter);
+            pnlFilters.Controls.Add(BtnClearFilters);
             pnlFilters.Controls.Add(lblOperator);
+            pnlFilters.Controls.Add(cmbValueType);
             pnlFilters.Controls.Add(lblValue);
             pnlFilters.Controls.Add(CbColumnsFilter);
             pnlFilters.Controls.Add(cmbFilterOperator);
             pnlFilters.Controls.Add(txtFilterValue);
-            pnlFilters.Controls.Add(BtnAddFilter);
             pnlFilters.Controls.Add(lstFilters);
-            pnlFilters.Controls.Add(BtnClearFilters);
-            pnlFilters.Controls.Add(BtnStart);
             resources.ApplyResources(pnlFilters, "pnlFilters");
             pnlFilters.Name = "pnlFilters";
+            // 
+            // label2
+            // 
+            resources.ApplyResources(label2, "label2");
+            label2.ForeColor = Color.FromArgb(160, 163, 175);
+            label2.Name = "label2";
+            // 
+            // CmbLogical
+            // 
+            CmbLogical.BackColor = Color.FromArgb(36, 38, 44);
+            CmbLogical.DropDownStyle = ComboBoxStyle.DropDownList;
+            resources.ApplyResources(CmbLogical, "CmbLogical");
+            CmbLogical.ForeColor = Color.FromArgb(235, 235, 240);
+            CmbLogical.Name = "CmbLogical";
+            // 
+            // label1
+            // 
+            resources.ApplyResources(label1, "label1");
+            label1.ForeColor = Color.FromArgb(160, 163, 175);
+            label1.Name = "label1";
             // 
             // lblFilter
             // 
@@ -204,11 +240,39 @@ namespace Presentation
             lblFilter.ForeColor = Color.FromArgb(160, 163, 175);
             lblFilter.Name = "lblFilter";
             // 
+            // BtnAddFilter
+            // 
+            BtnAddFilter.BackColor = Color.FromArgb(99, 102, 241);
+            BtnAddFilter.FlatAppearance.BorderSize = 0;
+            resources.ApplyResources(BtnAddFilter, "BtnAddFilter");
+            BtnAddFilter.ForeColor = Color.White;
+            BtnAddFilter.Name = "BtnAddFilter";
+            BtnAddFilter.UseVisualStyleBackColor = false;
+            BtnAddFilter.Click += BtnAddFilter_Click;
+            // 
+            // BtnClearFilters
+            // 
+            BtnClearFilters.BackColor = Color.FromArgb(36, 38, 44);
+            BtnClearFilters.FlatAppearance.BorderColor = Color.FromArgb(55, 58, 66);
+            resources.ApplyResources(BtnClearFilters, "BtnClearFilters");
+            BtnClearFilters.ForeColor = Color.FromArgb(160, 163, 175);
+            BtnClearFilters.Name = "BtnClearFilters";
+            BtnClearFilters.UseVisualStyleBackColor = false;
+            BtnClearFilters.Click += BtnClearFilters_Click;
+            // 
             // lblOperator
             // 
             resources.ApplyResources(lblOperator, "lblOperator");
             lblOperator.ForeColor = Color.FromArgb(160, 163, 175);
             lblOperator.Name = "lblOperator";
+            // 
+            // cmbValueType
+            // 
+            cmbValueType.BackColor = Color.FromArgb(36, 38, 44);
+            cmbValueType.DropDownStyle = ComboBoxStyle.DropDownList;
+            resources.ApplyResources(cmbValueType, "cmbValueType");
+            cmbValueType.ForeColor = Color.FromArgb(235, 235, 240);
+            cmbValueType.Name = "cmbValueType";
             // 
             // lblValue
             // 
@@ -223,7 +287,6 @@ namespace Presentation
             resources.ApplyResources(CbColumnsFilter, "CbColumnsFilter");
             CbColumnsFilter.ForeColor = Color.FromArgb(235, 235, 240);
             CbColumnsFilter.Name = "CbColumnsFilter";
-            CbColumnsFilter.SelectedIndexChanged += CbColumnsFilter_SelectedIndexChanged;
             // 
             // cmbFilterOperator
             // 
@@ -242,17 +305,6 @@ namespace Presentation
             resources.ApplyResources(txtFilterValue, "txtFilterValue");
             txtFilterValue.ForeColor = Color.FromArgb(235, 235, 240);
             txtFilterValue.Name = "txtFilterValue";
-            txtFilterValue.Enter += BtnAddFilter_Click;
-            // 
-            // BtnAddFilter
-            // 
-            BtnAddFilter.BackColor = Color.FromArgb(99, 102, 241);
-            BtnAddFilter.FlatAppearance.BorderSize = 0;
-            resources.ApplyResources(BtnAddFilter, "BtnAddFilter");
-            BtnAddFilter.ForeColor = Color.White;
-            BtnAddFilter.Name = "BtnAddFilter";
-            BtnAddFilter.UseVisualStyleBackColor = false;
-            BtnAddFilter.Click += BtnAddFilter_Click;
             // 
             // lstFilters
             // 
@@ -262,16 +314,6 @@ namespace Presentation
             lstFilters.ForeColor = Color.FromArgb(235, 235, 240);
             lstFilters.FormattingEnabled = true;
             lstFilters.Name = "lstFilters";
-            // 
-            // BtnClearFilters
-            // 
-            BtnClearFilters.BackColor = Color.FromArgb(36, 38, 44);
-            BtnClearFilters.FlatAppearance.BorderColor = Color.FromArgb(55, 58, 66);
-            resources.ApplyResources(BtnClearFilters, "BtnClearFilters");
-            BtnClearFilters.ForeColor = Color.FromArgb(160, 163, 175);
-            BtnClearFilters.Name = "BtnClearFilters";
-            BtnClearFilters.UseVisualStyleBackColor = false;
-            BtnClearFilters.Click += BtnClearFilters_Click;
             // 
             // BtnStart
             // 
@@ -306,7 +348,6 @@ namespace Presentation
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Name = "menuStrip1";
             menuStrip1.RenderMode = ToolStripRenderMode.Professional;
-            menuStrip1.ItemClicked += menuStrip1_ItemClicked;
             // 
             // fileToolStripMenuItem
             // 
@@ -354,7 +395,6 @@ namespace Presentation
             // 
             resources.ApplyResources(printPreviewToolStripMenuItem, "printPreviewToolStripMenuItem");
             printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            printPreviewToolStripMenuItem.Click += BtnExportPdf_Click;
             // 
             // toolStripSeparator2
             // 
@@ -483,11 +523,6 @@ namespace Presentation
             resources.ApplyResources(extrnaToolStripMenuItem, "extrnaToolStripMenuItem");
             extrnaToolStripMenuItem.Click += extrnaToolStripMenuItem_Click;
             // 
-            // timer1
-            // 
-            timer1.Interval = 10;
-            timer1.Tick += timer1_Tick;
-            // 
             // BottomToolStripPanel
             // 
             resources.ApplyResources(BottomToolStripPanel, "BottomToolStripPanel");
@@ -572,8 +607,6 @@ namespace Presentation
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(DgvData);
-            splitContainer1.Panel2.Paint += splitContainer1_Panel2_Paint;
-            splitContainer1.SplitterMoved += splitContainer1_SplitterMoved;
             // 
             // splitContainer2
             // 
@@ -665,7 +698,6 @@ namespace Presentation
             DgvData.RowHeadersVisible = false;
             DgvData.RowTemplate.Height = 32;
             DgvData.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DgvData.CellContentClick += DgvData_CellContentClick;
             // 
             // statusStripButtom
             // 
@@ -689,10 +721,6 @@ namespace Presentation
             // printDialog1
             // 
             printDialog1.UseEXDialog = true;
-            // 
-            // printDocument1
-            // 
-            printDocument1.PrintPage += printDocument_PrintPage;
             // 
             // Main
             // 
@@ -738,7 +766,6 @@ namespace Presentation
             PerformLayout();
         }
 
-        private System.Windows.Forms.Timer timer1;
         private ContextMenuStrip contextDgvData;
         private ToolStripMenuItem EditItem;
         private ToolStripMenuItem deleteTheItemToolStripMenuItem;
@@ -817,5 +844,10 @@ namespace Presentation
         private ToolStripStatusLabel StatusLabelConnection;
         private PrintDialog printDialog1;
         private System.Drawing.Printing.PrintDocument printDocument1;
+        private ComboBox cmbJoinTable;
+        private Label label2;
+        private ComboBox CmbLogical;
+        private Label label1;
+        private ComboBox cmbValueType;
     }
 }

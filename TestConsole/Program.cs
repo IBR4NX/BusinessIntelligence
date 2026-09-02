@@ -91,7 +91,7 @@ void TestSql()
         {
             ColumnName = "OrderID",
             Operator = ComparisonOperator.GreaterThan,
-            Value = 100,
+            Values={ 100 },
             LogicalOperator = LogicalOperator.And
         }
     },

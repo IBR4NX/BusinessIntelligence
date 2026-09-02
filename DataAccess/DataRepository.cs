@@ -1,15 +1,19 @@
 ﻿using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace DataAccess;
 
 public class DataRepository
 {
     private readonly SqlConnection connection;
+    private readonly DbConnection _dbConnection;
 
     public DataRepository(DbConnection dbConnection)
     {
         connection = dbConnection.connection;
+        _dbConnection = dbConnection;
     }
 
     public DataTable GetTableData(string tableName)
@@ -54,24 +58,24 @@ public class DataRepository
         string query,
         IReadOnlyDictionary<string, object?>? parameters = null)
     {
-        var table = new DataTable();
 
         //using SqlConnection connection = _dbConnection.CreateConnection();
 
-        using SqlCommand command = connection.CreateCommand();
+        //using SqlCommand command = connection.CreateCommand();
 
-        command.CommandText = query;
+        //command.CommandText = query;
 
-        if (parameters is not null)
-        {
-            foreach (var parameter in parameters)
-                command.Parameters.AddWithValue(parameter.Key, parameter.Value ?? DBNull.Value);
-        }
+        //if (parameters is not null)
+        //{
+        //    foreach (var parameter in parameters)
+        //        command.Parameters.AddWithValue(parameter.Key, parameter.Value ?? DBNull.Value);
+        //}
 
-        using SqlDataAdapter adapter = new SqlDataAdapter(command);
-
+        SqlDataAdapter adapter = new SqlDataAdapter(query,connection);
+        Debug.WriteLine(query);
+        var table = new DataTable();
         adapter.Fill(table);
-
+        Debug.WriteLine("--------------------------------------------------");
         return table;
     }
 }

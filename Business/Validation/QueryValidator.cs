@@ -14,14 +14,17 @@ public class QueryValidator
 
     public bool IsValidTable(string tableName)
     {
+        string normalized =
+            NormalizeTableName(tableName);
+
         return _metadata.Tables.Contains(
-            tableName,
+            normalized,
             StringComparer.OrdinalIgnoreCase);
     }
 
     public bool IsValidColumn(
-        string tableName,
-        string columnName)
+    string tableName,
+    string columnName)
     {
         if (!_metadata.Columns.TryGetValue(
                 tableName,
@@ -44,12 +47,7 @@ public class QueryValidator
 
     public bool IsValidValueCount(FilterDefinition filter)
     {
-        int count =
-            filter.Values?.Count > 0
-                ? filter.Values.Count
-                : filter.Value != null
-                    ? 1
-                    : 0;
+        int count =  (int)filter.Values.Count;
 
         return filter.Operator switch
         {
@@ -123,21 +121,20 @@ public class QueryValidator
     }
 
     private void ValidateColumnReference(
-        string column,
-        QueryDefinition query,
-        string context)
+    string column,
+    QueryDefinition query,
+    string context)
     {
         string tableName = query.TableName;
         string columnName = column;
 
         if (column.Contains('.'))
         {
-                
-
             string[] parts = column.Split('.', 2);
 
             tableName = parts[0];
             columnName = parts[1];
+
             if (!IsValidTable(tableName))
             {
                 throw new InvalidOperationException(
@@ -146,12 +143,14 @@ public class QueryValidator
 
             bool isMainTable = string.Equals(
                 tableName,
-                query.TableName,
+                GetTableShortName(query.TableName),
                 StringComparison.OrdinalIgnoreCase);
-            bool isJoinedTable = query.Joins.Any(join => string.Equals(
-                join.TableName,
-                tableName,
-                StringComparison.OrdinalIgnoreCase));
+
+            bool isJoinedTable = query.Joins.Any(join =>
+                string.Equals(
+                    tableName,
+                    GetTableShortName(join.TableName),
+                    StringComparison.OrdinalIgnoreCase));
 
             if (!isMainTable && !isJoinedTable)
             {
@@ -159,19 +158,23 @@ public class QueryValidator
                     $"{context}: Table '{tableName}' is not joined in the query.");
             }
 
-            if (!IsValidColumn(tableName, columnName))
+            if (!IsValidColumn(
+                    FindFullTableName(tableName),
+                    columnName))
             {
                 throw new InvalidOperationException(
                     $"{context}: Column '{columnName}' " +
                     $"does not exist in table '{tableName}'.");
             }
         }
-
-        else if (!IsValidColumn(tableName, columnName))
+        else
         {
-            throw new InvalidOperationException(
-                $"{context}: Column '{columnName}' " +
-                $"does not exist in table '{tableName}'.");
+            if (!IsValidColumn(query.TableName, columnName))
+            {
+                throw new InvalidOperationException(
+                    $"{context}: Column '{columnName}' " +
+                    $"does not exist in table '{query.TableName}'.");
+            }
         }
     }
 
@@ -205,7 +208,7 @@ public class QueryValidator
         }
     }
 
-    private void ValidateFilters(QueryDefinition query)
+    public void ValidateFilters(QueryDefinition query)
     {
         foreach (FilterDefinition filter in query.Filters)
         {
@@ -238,5 +241,41 @@ public class QueryValidator
             query.OrderBy,
             query,
             "OrderBy column");
+    }
+
+
+    private string NormalizeTableName(string tableName)
+    {
+        if (tableName.Contains('.'))
+            return tableName;
+
+        var matches = _metadata.Tables
+            .Where(t =>
+                t.EndsWith(
+                    "." + tableName,
+                    StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (matches.Count == 1)
+            return matches[0];
+
+        return tableName;
+    }
+    private string GetTableShortName(string fullTableName)
+    {
+        int index = fullTableName.IndexOf('.');
+
+        return index >= 0
+            ? fullTableName[(index + 1)..]
+            : fullTableName;
+    }
+    private string FindFullTableName(string tableName)
+    {
+        return _metadata.Tables.FirstOrDefault(t =>
+            string.Equals(
+                GetTableShortName(t),
+                tableName,
+                StringComparison.OrdinalIgnoreCase))
+            ?? tableName;
     }
 }

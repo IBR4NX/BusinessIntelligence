@@ -17,13 +17,13 @@ public class DatabaseRepository
     public List<string> GetTables()
     {
         const string query = """
-            SELECT TABLE_NAME
-            FROM INFORMATION_SCHEMA.TABLES
-            WHERE TABLE_TYPE = 'BASE TABLE'
-            ORDER BY TABLE_NAME;
-            """;
-        var tables = new List<string>();
+        SELECT TABLE_SCHEMA, TABLE_NAME
+        FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_TYPE = 'BASE TABLE'
+        ORDER BY TABLE_SCHEMA, TABLE_NAME;
+        """;
 
+        var tables = new List<string>();
 
         using SqlCommand command = new(query, connection);
 
@@ -33,16 +33,23 @@ public class DatabaseRepository
 
         while (reader.Read())
         {
-            tables.Add(reader.GetString(0));
+            string schema = reader.GetString(0);
+            string table = reader.GetString(1);
+
+            tables.Add($"{schema}.{table}");
         }
+
         connection.Close();
+
         return tables;
     }
-    public List<ColumnInfo> GetColumns(string tableName)
-    {
-        var columns = new List<ColumnInfo>();
 
-        //using SqlConnection connection = _dbConnection.CreateConnection();
+    public List<ColumnInfo> GetColumns(string fullTableName)
+    {
+        var (schemaName, tableName) =
+            SplitTableName(fullTableName);
+
+        var columns = new List<ColumnInfo>();
 
         connection.Open();
 
@@ -50,12 +57,17 @@ public class DatabaseRepository
             "Columns",
             new[] { null, null, tableName, null });
 
-        var primaryKeys = GetPrimaryKeys(tableName);
-        var foreignKeys = GetForeignKeys(tableName);
+        var primaryKeys =
+            GetPrimaryKeys(schemaName, tableName);
+
+        var foreignKeys =
+            GetForeignKeys(schemaName, tableName);
 
         foreach (DataRow row in schema.Rows)
         {
-            string columnName = row["COLUMN_NAME"]?.ToString() ?? string.Empty;
+            string columnName =
+                row["COLUMN_NAME"]?.ToString()
+                ?? string.Empty;
 
             var foreignKey = foreignKeys.FirstOrDefault(
                 fk => fk.ColumnName == columnName);
@@ -64,46 +76,58 @@ public class DatabaseRepository
             {
                 Name = columnName,
 
-                DataType = row["DATA_TYPE"]?.ToString()
-                           ?? string.Empty,
+                DataType =
+                    row["DATA_TYPE"]?.ToString()
+                    ?? string.Empty,
 
-                IsNullable = row["IS_NULLABLE"]?.ToString() == "YES",
+                IsNullable =
+                    row["IS_NULLABLE"]?.ToString() == "YES",
 
-                OrdinalPosition = Convert.ToInt32(
-                    row["ORDINAL_POSITION"]),
+                OrdinalPosition =
+                    Convert.ToInt32(row["ORDINAL_POSITION"]),
 
-                MaxLength = row["CHARACTER_MAXIMUM_LENGTH"] == DBNull.Value
-                    ? null
-                    : Convert.ToInt32(
-                        row["CHARACTER_MAXIMUM_LENGTH"]),
+                MaxLength =
+                    row["CHARACTER_MAXIMUM_LENGTH"] == DBNull.Value
+                        ? null
+                        : Convert.ToInt32(
+                            row["CHARACTER_MAXIMUM_LENGTH"]),
 
-                NumericPrecision = row["NUMERIC_PRECISION"] == DBNull.Value
-                    ? null
-                    : Convert.ToByte(
-                        row["NUMERIC_PRECISION"]),
+                NumericPrecision =
+                    row["NUMERIC_PRECISION"] == DBNull.Value
+                        ? null
+                        : Convert.ToByte(
+                            row["NUMERIC_PRECISION"]),
 
-                NumericScale = row["NUMERIC_SCALE"] == DBNull.Value
-                    ? null
-                    : Convert.ToInt32(
-                        row["NUMERIC_SCALE"]),
+                NumericScale =
+                    row["NUMERIC_SCALE"] == DBNull.Value
+                        ? null
+                        : Convert.ToInt32(
+                            row["NUMERIC_SCALE"]),
 
-                IsPrimaryKey = primaryKeys.Contains(columnName),
+                IsPrimaryKey =
+                    primaryKeys.Contains(columnName),
 
-                IsForeignKey = foreignKey != null,
+                IsForeignKey =
+                    foreignKey != null,
 
-                ReferencedTable = foreignKey?.ReferencedTable,
+                ReferencedTable =
+                    foreignKey?.ReferencedTable,
 
-                ReferencedColumn = foreignKey?.ReferencedColumn
+                ReferencedColumn =
+                    foreignKey?.ReferencedColumn
             });
         }
+
         connection.Close();
 
         return columns;
     }
 
-    public List<string> GetPrimaryKeys(string tableName)
+    private HashSet<string> GetPrimaryKeys(
+    string schemaName,
+    string tableName)
     {
-        const string query = """
+        const string sql = """
         SELECT c.name
         FROM sys.indexes i
         INNER JOIN sys.index_columns ic
@@ -112,19 +136,22 @@ public class DatabaseRepository
         INNER JOIN sys.columns c
             ON ic.object_id = c.object_id
             AND ic.column_id = c.column_id
+        INNER JOIN sys.tables t
+            ON i.object_id = t.object_id
+        INNER JOIN sys.schemas s
+            ON t.schema_id = s.schema_id
         WHERE i.is_primary_key = 1
-          AND i.object_id = OBJECT_ID(@TableName)
+          AND s.name = @SchemaName
+          AND t.name = @TableName
         ORDER BY ic.key_ordinal;
         """;
 
-        var primaryKeys = new List<string>();
+        var primaryKeys = new HashSet<string>(
+            StringComparer.OrdinalIgnoreCase);
 
-        //using var connection = _dbConnection.CreateConnection();
+        using var command = new SqlCommand(sql, connection);
 
-        //connection.Open();
-
-        using var command = new SqlCommand(query, connection);
-
+        command.Parameters.AddWithValue("@SchemaName", schemaName);
         command.Parameters.AddWithValue("@TableName", tableName);
 
         using var reader = command.ExecuteReader();
@@ -136,39 +163,50 @@ public class DatabaseRepository
 
         return primaryKeys;
     }
-    public List<ForeignKeyInfo> GetForeignKeys(string tableName)
+
+    private List<ForeignKeyInfo> GetForeignKeys(
+        string schemaName,
+        string tableName)
     {
-        const string query = """
+        const string sql = """
         SELECT
-            fk.name AS ForeignKeyName,
             c.name AS ColumnName,
+            rs.name AS ReferencedSchema,
             rt.name AS ReferencedTable,
             rc.name AS ReferencedColumn
-        FROM sys.foreign_keys fk
-        INNER JOIN sys.foreign_key_columns fkc
-            ON fk.object_id = fkc.constraint_object_id
+        FROM sys.foreign_key_columns fkc
+
         INNER JOIN sys.tables t
-            ON fk.parent_object_id = t.object_id
+            ON fkc.parent_object_id = t.object_id
+
+        INNER JOIN sys.schemas s
+            ON t.schema_id = s.schema_id
+
         INNER JOIN sys.columns c
             ON fkc.parent_object_id = c.object_id
             AND fkc.parent_column_id = c.column_id
+
         INNER JOIN sys.tables rt
             ON fkc.referenced_object_id = rt.object_id
+
+        INNER JOIN sys.schemas rs
+            ON rt.schema_id = rs.schema_id
+
         INNER JOIN sys.columns rc
             ON fkc.referenced_object_id = rc.object_id
             AND fkc.referenced_column_id = rc.column_id
-        WHERE t.name = @TableName
-        ORDER BY fk.name, fkc.constraint_column_id;
+
+        WHERE s.name = @SchemaName
+          AND t.name = @TableName
+
+        ORDER BY fkc.constraint_column_id;
         """;
 
         var foreignKeys = new List<ForeignKeyInfo>();
 
-        //using var connection = _dbConnection.CreateConnection();
+        using var command = new SqlCommand(sql, connection);
 
-        //connection.Open();
-
-        using var command = new SqlCommand(query, connection);
-
+        command.Parameters.AddWithValue("@SchemaName", schemaName);
         command.Parameters.AddWithValue("@TableName", tableName);
 
         using var reader = command.ExecuteReader();
@@ -177,14 +215,23 @@ public class DatabaseRepository
         {
             foreignKeys.Add(new ForeignKeyInfo
             {
-                Name = reader["ForeignKeyName"].ToString()!,
-                ColumnName = reader["ColumnName"].ToString()!,
-                ReferencedTable = reader["ReferencedTable"].ToString()!,
-                ReferencedColumn = reader["ReferencedColumn"].ToString()!
+                ColumnName = reader.GetString(0),
+                ReferencedTable = reader.GetString(2),
+                ReferencedColumn = reader.GetString(3)
             });
         }
 
         return foreignKeys;
+    }
+
+    private static (string Schema, string Table) SplitTableName(string fullTableName)
+    {
+        string[] parts = fullTableName.Split('.', 2);
+
+        if (parts.Length == 1)
+            return ("dbo", parts[0]);
+
+        return (parts[0], parts[1]);
     }
 
 }
